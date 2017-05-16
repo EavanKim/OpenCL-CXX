@@ -1,0 +1,47 @@
+// Copyright 2017 The Khronos Group. 
+//
+//  Khronos licenses this file to you under the Creative Commons Attribution 4.0 
+//  International (CC BY 4.0) License (the "License"); you may not use this file 
+//  except in compliance with the License.  You may obtain a copy of the License 
+//  at https://creativecommons.org/licenses/by/4.0/
+//
+//  Unless required by applicable law or agreed to in writing, material distributed 
+//  under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+//  CONDITIONS OF ANY KIND, either express or implied. If all or a portion of this 
+//  material is re-used, notice substantially similar to the following must be included:
+//
+//  This specification includes material developed at The Khronos Group 
+//  (http://www.khronos.org/). Khronos supplied such material on an "AS IS" BASIS, 
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, under 
+//  the terms of the Creative Commons Attribution 4.0 International (CC BY 4.0) 
+//  License (the "License"), available at https://creativecommons.org/licenses/by/4.0/. 
+//  All use of such material is governed by the term of the License. Khronos bears 
+//  no responsibility whatsoever for additions or modifications to its material.
+
+[[opencl_cxx_restrictions]]
+=== Restrictions
+
+The following {cpp14} features are not supported by OpenCL {cpp}:
+
+* the +dynamic_cast+ operator (_ISO {cpp} Section 5.2.7_)
+* type identification (_ISO {cpp} Section 5.2.8_)
+* recursive function calls (_ISO {cpp} Section 5.2.2, item 9_) unless they are a compile-time constant expression
+* non-placement +new+ and +delete+ operators (_ISO {cpp} Sections 5.3.4 and 5.3.5_)
+* +goto+ statement (_ISO {cpp} Section 6.6_)
+* +register+ and +thread_local+ storage qualifiers (_ISO {cpp} Section 7.1.1_)
+* virtual function qualifier (_ISO {cpp} Section 7.1.2_)
+* function pointers (_ISO {cpp} Sections 8.3.5 and 8.5.3_) unless they are a compile-time  constant expression
+* virtual functions and abstract classes (_ISO {cpp} Sections 10.3 and 10.4_)
+* exception handling (_ISO {cpp} Section 15_)
+* the {cpp} standard library (_ISO {cpp} Sections 17 ... 30_)
+* +asm+ declaration (_ISO {cpp} Section 7.4_)
+* no implicit lambda to function pointer conversion (_ISO {cpp} Section 5.1.2, item 6_)
+* variadic functions (_ISO C99 Section 7.15, Variable arguments <stdarg.h>_)
+* and, like {cpp}, OpenCL {cpp} does not support variable length arrays (_ISO C99, Section 6.7.5_).
+
+To avoid potential confusion with the above, please note the following features _are_ supported in OpenCL {cpp}:
+  
+* All variadic templates (_ISO {cpp} Section 14.5.3_) including variadic function templates are supported.
+
+NOTE: This page refers to _ISO C99_ instead of _ISO C11_ since the _ISO {cpp14}_ document refers to _ISO C99_ in _ISO {cpp} Section 1.2 and Annex C_.
+

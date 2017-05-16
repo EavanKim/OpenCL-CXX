@@ -1,0 +1,38 @@
+// Copyright 2017 The Khronos Group. 
+//
+//  Khronos licenses this file to you under the Creative Commons Attribution 4.0 
+//  International (CC BY 4.0) License (the "License"); you may not use this file 
+//  except in compliance with the License.  You may obtain a copy of the License 
+//  at https://creativecommons.org/licenses/by/4.0/
+//
+//  Unless required by applicable law or agreed to in writing, material distributed 
+//  under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+//  CONDITIONS OF ANY KIND, either express or implied. If all or a portion of this 
+//  material is re-used, notice substantially similar to the following must be included:
+//
+//  This specification includes material developed at The Khronos Group 
+//  (http://www.khronos.org/). Khronos supplied such material on an "AS IS" BASIS, 
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, under 
+//  the terms of the Creative Commons Attribution 4.0 International (CC BY 4.0) 
+//  License (the "License"), available at https://creativecommons.org/licenses/by/4.0/. 
+//  All use of such material is governed by the term of the License. Khronos bears 
+//  no responsibility whatsoever for additions or modifications to its material.
+
+[[implicit-type-conversions]]
+=== Implicit Type Conversions
+
+Implicit conversions between scalar built-in types defined in <<device_builtin_scalar_data_types,Device built-in scalar data types>> table (except +void+) are supported.
+When an implicit conversion is done, it is not just a re-interpretation of the expression's value, but a conversion of that value to an equivalent value in the new type.
+For example, the integer value 5 will be converted to the floating-point value 5.0.
+
+Implicit conversions from a scalar type to a vector type are allowed.
+In this case, the scalar may be subject to the usual arithmetic conversion to the element type used by the vector.
+The scalar type is then widened to the vector.
+If conversion from a scalar type to the element type used by the vector result in truncation or precision loss, the program is ill-formed, with the exception that:
+
+* if scalar value is prvalue of literal type and the value is representable as the element type, the conversion should take place without error (warnings may be generated in this case).
+
+Implicit conversions between built-in vector data types are disallowed.
+Explicit conversions described in __<<conversions-library,Conversions Library>> section__ must be used instead.
+
+Implicit conversions for pointer types follow the rules described in the {cpp14} specification.

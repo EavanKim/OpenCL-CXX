@@ -1,0 +1,94 @@
+// Copyright 2017 The Khronos Group. 
+//
+//  Khronos licenses this file to you under the Creative Commons Attribution 4.0 
+//  International (CC BY 4.0) License (the "License"); you may not use this file 
+//  except in compliance with the License.  You may obtain a copy of the License 
+//  at https://creativecommons.org/licenses/by/4.0/
+//
+//  Unless required by applicable law or agreed to in writing, material distributed 
+//  under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+//  CONDITIONS OF ANY KIND, either express or implied. If all or a portion of this 
+//  material is re-used, notice substantially similar to the following must be included:
+//
+//  This specification includes material developed at The Khronos Group 
+//  (http://www.khronos.org/). Khronos supplied such material on an "AS IS" BASIS, 
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, under 
+//  the terms of the Creative Commons Attribution 4.0 International (CC BY 4.0) 
+//  License (the "License"), available at https://creativecommons.org/licenses/by/4.0/. 
+//  All use of such material is governed by the term of the License. Khronos bears 
+//  no responsibility whatsoever for additions or modifications to its material.
+
+[[range-library]]
+=== Range Library
+
+OpenCL {cpp} implements small library that contains useful utilities to manipulate iterator ranges.
+
+[[header-opencl_range-synopsis]]
+==== Header <opencl_range> Synopsis
+
+[source]
+----
+namespace cl
+{
+template <class It>
+struct range_type
+{
+    constexpr range_type(It& it) noexcept;
+    constexpr range_type(It& it, difference_type end) noexcept;
+    constexpr range_type(It& it, difference_type begin,
+                         difference_type end) noexcept;
+    
+    constexpr auto begin( ) noexcept;
+    constexpr auto end( ) noexcept;
+};
+
+template <class It>
+constexpr auto range(It& it) noexcept;
+
+template <class It>
+constexpr auto range(It& it, difference_type end) noexcept;
+
+template <class It>
+constexpr auto range(It& it, difference_type begin,
+                     difference_type end) noexcept;
+
+// difference_type is It::difference_type if present ptrdiff_t otherwise.
+
+}
+----
+
+[[range-type]]
+==== Range type
+
+Range type represents a given range over iterable type.
+Depending on constructor used:
+
+[source]
+----
+constexpr range_type(It& it) noexcept;
+----
+
+Represents range from +begin(it)+ to +end(it)+.
+
+[source]
+----
+constexpr range_type(It& it, difference_type end) noexcept;
+----
+
+Represents range from +begin(it)+ to ++begin(it)+end++.
+
+[source]
+----
+constexpr range_type(It& it, difference_type begin,
+                     difference_type end) noexcept;
+----
+
+Represents range from ++begin(it)+begin++ to ++begin(it)+end++.
+
+[[range-function]]
+==== Range function
+
+range function is present in three overloads matching +range_type+ constructors.
+It is a factory function building +range_type+.
+
+NOTE: This function main purpose is enabling the use of range based for loops on built-in vectors.

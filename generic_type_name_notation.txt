@@ -1,0 +1,103 @@
+// Copyright 2017 The Khronos Group. 
+//
+//  Khronos licenses this file to you under the Creative Commons Attribution 4.0 
+//  International (CC BY 4.0) License (the "License"); you may not use this file 
+//  except in compliance with the License.  You may obtain a copy of the License 
+//  at https://creativecommons.org/licenses/by/4.0/
+//
+//  Unless required by applicable law or agreed to in writing, material distributed 
+//  under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+//  CONDITIONS OF ANY KIND, either express or implied. If all or a portion of this 
+//  material is re-used, notice substantially similar to the following must be included:
+//
+//  This specification includes material developed at The Khronos Group 
+//  (http://www.khronos.org/). Khronos supplied such material on an "AS IS" BASIS, 
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, under 
+//  the terms of the Creative Commons Attribution 4.0 International (CC BY 4.0) 
+//  License (the "License"), available at https://creativecommons.org/licenses/by/4.0/. 
+//  All use of such material is governed by the term of the License. Khronos bears 
+//  no responsibility whatsoever for additions or modifications to its material.
+
+[[generic-type-name-notation]]
+== Generic Type Name Notation
+
+The generic type names are used when some entity has multiple overloads which differ only by argument(s).
+They can map to one or more built-in data types.
+The tables below describe these mappings in details.
+
+Assuming that +gentype+ maps to built-in types: +float+, +int+ and +uint+, when coming across definition:
+[source]
+----
+gentype function(gentype x);
+----
+
+reader should understand that such function has in fact three overloads:
+[source]
+----
+float function(float x);
+int function(int x);
+uint function(uint x);
+----
+
+Note that if a function signature has multiple usages of +gentype+ they all should map to the same type.
+Following this rule such overloads are then invalid:
+[source]
+----
+float function(int x);
+uint function(float x);
+// etc.
+----
+
+If a function is meant to have such overloads, respective gentypes in its signature should be postfixed with numbers to indicate they represent different types.
+Declaration like this:
+[source]
+----
+cl::common_type_t<gentype1, gentype2> greater(gentype1 x, gentype2 y);
+----
+
+would match following overloads:
+
+[source]
+----
+cl::common_type_t<float, float> greater(float x, float y);
+cl::common_type_t<float, int> greater(float x, int y);
+cl::common_type_t<float, uint> greater(float x, uint y);
+cl::common_type_t<int, float> greater(int x, float y);
+
+// etc.
+----
+
+.generic types
+[width="100%",cols="50%,50%",options="header"]
+|=================================================================
+a|*generic type*
+a|*corresponding built-in types*
+
+a|+typen+
+a|scalar and all vector types of type
+
+
+Example:
+
++floatn+ matches: +float+, +float2+, +float3+, +float4+, +float8+ and +float16+
+
++floatn+ doesn't match: +half+, +int2+
+
+a|+gentype+
+a|unspecified in global context, should be defined whenever used
+
+a|+sgentype+
+a|subset of scalar types from types matched by +gentype+
+
+a|+ugentype+
+a|subset of unsigned integer types from types matched by +gentype+
+
+a|+gentypeh+
+a|+half+, +half2+, +half3+, +half4+, +half8+ or +half16+
+
+a|+gentypef+
+a|+float+, +float2+, +float3+, +float4+, +float8+ or +float16+
+
+a|+gentyped+
+a|+double+, +double2+, +double3+, +double4+, +double8+ or +double16+
+|=================================================================

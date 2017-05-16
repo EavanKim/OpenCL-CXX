@@ -1,0 +1,54 @@
+// Copyright 2017 The Khronos Group. 
+//
+//  Khronos licenses this file to you under the Creative Commons Attribution 4.0 
+//  International (CC BY 4.0) License (the "License"); you may not use this file 
+//  except in compliance with the License.  You may obtain a copy of the License 
+//  at https://creativecommons.org/licenses/by/4.0/
+//
+//  Unless required by applicable law or agreed to in writing, material distributed 
+//  under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+//  CONDITIONS OF ANY KIND, either express or implied. If all or a portion of this 
+//  material is re-used, notice substantially similar to the following must be included:
+//
+//  This specification includes material developed at The Khronos Group 
+//  (http://www.khronos.org/). Khronos supplied such material on an "AS IS" BASIS, 
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, under 
+//  the terms of the Creative Commons Attribution 4.0 International (CC BY 4.0) 
+//  License (the "License"), available at https://creativecommons.org/licenses/by/4.0/. 
+//  All use of such material is governed by the term of the License. Khronos bears 
+//  no responsibility whatsoever for additions or modifications to its material.
+
+[[general-utilities-library]]
+=== General Utilities Library
+
+OpenCL {cpp} implements part of utility library (_chapter 20.2, [utilities]_) from the {cpp14} standard.
+
+For the detailed description please refer to {cpp14} standard.
+
+[[header-opencl_utility-synopsis]]
+==== Header <opencl_utility> Synopsis
+
+[source]
+----
+namespace cl
+{
+template<class T>
+add_rvalue_reference_t<T> declval( );
+
+template <class T>
+constexpr T&& forward(typename remove_reference_t& t) noexcept;
+template <class T>
+constexpr T&& forward(typename remove_reference_t&& t) noexcept;
+template <class T>
+constexpr typename remove_reference_t&& move(T&& t) noexcept;
+
+template<class T>
+void swap(T& a, T& b) noexcept;
+
+template <class T>
+  constexpr conditional_t<
+  !is_nothrow_move_constructible<T>::value && is_copy_constructible<T>::value,
+  const T&, T&&> move_if_noexcept(T& x) noexcept;
+
+}
+----

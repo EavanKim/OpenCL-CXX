@@ -1,0 +1,27 @@
+// Copyright 2017 The Khronos Group. 
+//
+//  Khronos licenses this file to you under the Creative Commons Attribution 4.0 
+//  International (CC BY 4.0) License (the "License"); you may not use this file 
+//  except in compliance with the License.  You may obtain a copy of the License 
+//  at https://creativecommons.org/licenses/by/4.0/
+//
+//  Unless required by applicable law or agreed to in writing, material distributed 
+//  under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+//  CONDITIONS OF ANY KIND, either express or implied. If all or a portion of this 
+//  material is re-used, notice substantially similar to the following must be included:
+//
+//  This specification includes material developed at The Khronos Group 
+//  (http://www.khronos.org/). Khronos supplied such material on an "AS IS" BASIS, 
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, under 
+//  the terms of the Creative Commons Attribution 4.0 International (CC BY 4.0) 
+//  License (the "License"), available at https://creativecommons.org/licenses/by/4.0/. 
+//  All use of such material is governed by the term of the License. Khronos bears 
+//  no responsibility whatsoever for additions or modifications to its material.
+
+[[openclcpp-programming-language]]
+== OpenCL {cpp} Programming Language
+
+This section describes the OpenCL {cpp} programming language used to create kernels that are executed on OpenCL device(s).
+The OpenCL {cpp} programming language is based on the ISO/IEC JTC1 SC22 WG21 N 3690 language specification (a.k.a. {cpp14} specification) with specific restrictions (__<<opencl_cxx_restrictions, OpenCL {cpp} restrictions>> section__).
+Please refer to this specification for a detailed description of the language grammar.
+This section describes restrictions to the {cpp14} specification supported in OpenCL {cpp}.

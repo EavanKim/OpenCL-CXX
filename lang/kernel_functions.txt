@@ -1,0 +1,60 @@
+// Copyright 2017 The Khronos Group. 
+//
+//  Khronos licenses this file to you under the Creative Commons Attribution 4.0 
+//  International (CC BY 4.0) License (the "License"); you may not use this file 
+//  except in compliance with the License.  You may obtain a copy of the License 
+//  at https://creativecommons.org/licenses/by/4.0/
+//
+//  Unless required by applicable law or agreed to in writing, material distributed 
+//  under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+//  CONDITIONS OF ANY KIND, either express or implied. If all or a portion of this 
+//  material is re-used, notice substantially similar to the following must be included:
+//
+//  This specification includes material developed at The Khronos Group 
+//  (http://www.khronos.org/). Khronos supplied such material on an "AS IS" BASIS, 
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, under 
+//  the terms of the Creative Commons Attribution 4.0 International (CC BY 4.0) 
+//  License (the "License"), available at https://creativecommons.org/licenses/by/4.0/. 
+//  All use of such material is governed by the term of the License. Khronos bears 
+//  no responsibility whatsoever for additions or modifications to its material.
+
+[[kernel-functions]]
+=== Kernel Functions
+
+[[function-qualifiers]]
+==== Function Qualifiers
+
+The +kernel+ (or +__kernel+) qualifier declares a function to be a kernel that can be executed by an application on an OpenCL device(s).
+The following rules apply to functions that are declared with this qualifier:
+
+* It can be executed on the device only.
+* It can be enqueued by the host or on the device.
+
+The +kernel+ and +__kernel+ names are reserved for use as functions qualifiers and shall not be used otherwise.
+
+[[restrictions]]
+==== Restrictions
+
+[[kernel-function-restrictions]]
+===== Kernel Function Restrictions
+
+* A kernel functions are by implicitly declared as +extern "C"+.
+* A kernel function cannot be overloaded.
+* A kernel function cannot be template functions.
+* A kernel function cannot be called by another kernel function.
+* A kernel function cannot have parameters specified with default values.
+* A kernel function must have the return type +void+.
+* A kernel function cannot be called +main+.
+
+[[kernel-parameter-restrictions]]
+===== Kernel Parameter Restrictions
+
+The OpenCL host compiler and the OpenCL {cpp} kernel language device compiler can have different requirements for i.e. type sizes, data packing and alignment, etc., therefore the kernel parameters must meet the following requirements:
+
+* Types passed by pointer or reference must be standard layout types.
+* Types passed by value must be POD types.
+* Types cannot be declared with the built-in bool scalar type, vector type or a class that contain bool scalar or vector type fields.
+* Types cannot be structures and classes with bit field members.
+* Marker types must be passed by value (__<<marker-types,Marker Types>> section__).
+* +global+, +constant+, +local+ storage classes can be passed only by reference or pointer. More details in __<<explicit-address-space-storage-classes,Explicit address space storage classes>> section__.
+* Pointers and references must point to one of the following address spaces: global, local or constant.

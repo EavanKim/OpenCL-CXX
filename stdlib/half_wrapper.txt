@@ -1,0 +1,319 @@
+// Copyright 2017 The Khronos Group. 
+//
+//  Khronos licenses this file to you under the Creative Commons Attribution 4.0 
+//  International (CC BY 4.0) License (the "License"); you may not use this file 
+//  except in compliance with the License.  You may obtain a copy of the License 
+//  at https://creativecommons.org/licenses/by/4.0/
+//
+//  Unless required by applicable law or agreed to in writing, material distributed 
+//  under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+//  CONDITIONS OF ANY KIND, either express or implied. If all or a portion of this 
+//  material is re-used, notice substantially similar to the following must be included:
+//
+//  This specification includes material developed at The Khronos Group 
+//  (http://www.khronos.org/). Khronos supplied such material on an "AS IS" BASIS, 
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, under 
+//  the terms of the Creative Commons Attribution 4.0 International (CC BY 4.0) 
+//  License (the "License"), available at https://creativecommons.org/licenses/by/4.0/. 
+//  All use of such material is governed by the term of the License. Khronos bears 
+//  no responsibility whatsoever for additions or modifications to its material.
+
+[[half-wrapper-library]]
+=== Half Wrapper Library
+
+The OpenCL {cpp} programming language implements a wrapper class for the built-in half data type (<<builtin-half-data-type,Built-in Half Data Type>> section).
+The class methods perform implicit +vload_half+ and +vstore_half+ operations from __<<vector-data-load-and-store-functions,Vector Data Load and Store Functions>> section__.
+
+[[header-opencl_half-synopsis]]
+==== Header <opencl_half> Synopsis
+
+[source]
+----
+namespace cl {
+struct fp16
+{
+    fp16() = default;
+    fp16(const fp16 &) = default;
+    fp16(fp16 &&) = default;
+    fp16 &operator=(const fp16 &) = default;
+    fp16 &operator=(fp16 &&) = default;
+  
+    explicit operator bool() const noexcept;
+
+#ifdef cl_khr_fp16
+    fp16(half r) noexcept;
+    fp16 &operator=(half r) noexcept;
+    operator half() const noexcept;
+#endif
+
+    fp16(float r) noexcept;
+    fp16 &operator=(float r) noexcept;
+    operator float() const noexcept;
+  
+#ifdef cl_khr_fp64
+    fp16(double r) noexcept;
+    fp16 &operator=(double r) noexcept;
+    operator double() const noexcept;
+#endif
+
+    fp16 &operator++() noexcept;
+    fp16 operator++(int) noexcept;
+    fp16 &operator--() noexcept;
+    fp16 operator--(int) noexcept;
+    fp16 &operator+=(const fp16 &r) noexcept;
+    fp16 &operator-=(const fp16 &r) noexcept;
+    fp16 &operator*=(const fp16 &r) noexcept;
+    fp16 &operator/=(const fp16 &r) noexcept;
+};
+
+bool operator==(const fp16& lhs, const fp16& rhs) noexcept;
+bool operator!=(const fp16& lhs, const fp16& rhs) noexcept;
+bool operator< (const fp16& lhs, const fp16& rhs) noexcept;
+bool operator> (const fp16& lhs, const fp16& rhs) noexcept;
+bool operator<=(const fp16& lhs, const fp16& rhs) noexcept;
+bool operator>=(const fp16& lhs, const fp16& rhs) noexcept;
+fp16 operator+(const fp16& lhs, const fp16& rhs) noexcept;
+fp16 operator-(const fp16& lhs, const fp16& rhs) noexcept;
+fp16 operator*(const fp16& lhs, const fp16& rhs) noexcept;
+fp16 operator/(const fp16& lhs, const fp16& rhs) noexcept;
+
+}
+----
+
+[[constructors-1]]
+==== Constructors
+
+[source]
+----
+fp16(const half &r) noexcept;
+----
+
+Constructs an object with a half built-in type.
+
+[source]
+----
+fp16(const float &r) noexcept;
+----
+
+Constructs an object with a float built-in type.
+If the _cl_khr_fp16_ extension is not supported, +vstore_half+ built-in function is called with the default rounding mode.
+
+[source]
+----
+fp16(const double &r) noexcept;
+----
+
+Constructs an object with a double built-in type.
+If the _cl_khr_fp16_ extension is not supported, +vstore_half+ built-in function is called with the default rounding mode.
+The constructor is only present if the double precision support is enabled.
+
+[[assignment-operators-1]]
+==== Assignment operators
+
+[source]
+----
+fp16 &operator=(const half &r) noexcept;
+----
+
+Assigns r to the stored half type.
+
+[source]
+----
+fp16 &operator=(const float &r) noexcept;
+----
+
+Assigns r to the stored half type.
+If the _cl_khr_fp16_ extension is not supported, +vstore_half+ built-in function is called with the default rounding mode.
+
+[source]
+----
+fp16 &operator=(const double &r) noexcept;
+----
+
+Assigns r to the stored half type.
+If the _cl_khr_fp16_ extension is not supported, +vstore_half+ built-in function is called with the default rounding mode.
+The operator is only present if the double precision support is enabled.
+
+[[conversion-operators]]
+==== Conversion operators
+[source]
+----
+explicit operator bool() const noexcept;
+----
+
+Returns +m != 0.0h+.
+If the _cl_khr_fp16_ extension is not supported, +vload_half+ built-in function is called.
+
+[source]
+----
+operator half() const noexcept;
+----
+
+Conversion operator to the built-in half type.
+
+[source]
+----
+operator float() const noexcept;
+----
+
+Conversion operator.
+If the _cl_khr_fp16_ extension is not supported, +vload_half+ built-in function is called.
+
+[source]
+----
+operator double() const noexcept;
+----
+
+Conversion operator.
+If the _cl_khr_fp16_ extension is not supported, +vload_half+ built-in function is called.
+The operator is only present if the double precision support is enabled.
+
+[[arithmetic-operations]]
+==== Arithmetic operations
+
+[source]
+----
+fp16 &operator++() noexcept;
+----
+
+Pre-increment operator.
+If the _cl_khr_fp16_ extension is not supported, +vload_half+ and +vstore_half+ built-in functions are called.
+
+[source]
+----
+fp16 operator++(int) noexcept;
+----
+
+Post-increment operator.
+If the _cl_khr_fp16_ extension is not supported, +vload_half+ and +vstore_half+ built-in functions are called.
+
+[source]
+----
+fp16 &operator--() noexcept;
+----
+
+Pre-decrement operator.
+If the _cl_khr_fp16_ extension is not supported, +vload_half+ and +vstore_half+ built-in functions are called.
+
+[source]
+----
+fp16 operator--(int) noexcept;
+----
+
+Pre-decrement operator.
+If the _cl_khr_fp16_ extension is not supported, +vload_half+ and +vstore_half+ built-in functions are called.
+
+[source]
+----
+fp16 &operator+=(const fp16 &r) noexcept;
+----
+
+Addition operator.
+If the _cl_khr_fp16_ extension is not supported, +vload_half+ and +vstore_half+ built-in functions are called.
+
+[source]
+----
+fp16 &operator-=(const fp16 &r) noexcept;
+----
+
+Subtract operator.
+If the _cl_khr_fp16_ extension is not supported, +vload_half+ and +vstore_half+ built-in functions are called.
+
+[source]
+----
+fp16 &operator*=(const fp16 &r) noexcept;
+----
+
+Multiplication operator.
+If the _cl_khr_fp16_ extension is not supported, +vload_half+ and +vstore_half+ built-in functions are called.
+
+[source]
+----
+fp16 &operator/=(const fp16 &r) noexcept;
+----
+
+Division operator.
+If the _cl_khr_fp16_ extension is not supported, +vload_half+ and +vstore_half+ built-in functions are called.
+
+[[non-member-functions-1]]
+==== Non-member functions
+
+[source]
+----
+bool operator==(const fp16& lhs, const fp16& rhs) noexcept;
+----
+
+Comparison operator ==.
+If the _cl_khr_fp16_ extension is not supported, +vload_half+ built-in function is called.
+
+[source]
+----
+bool operator!=(const fp16& lhs, const fp16& rhs) noexcept;
+----
+
+Comparison operator !=.
+If the _cl_khr_fp16_ extension is not supported, +vload_half+ built-in function is called.
+
+[source]
+----
+bool operator< (const fp16& lhs, const fp16& rhs) noexcept;
+----
+
+Comparison operator <.
+If the _cl_khr_fp16_ extension is not supported, +vload_half+ built-in function is called.
+
+[source]
+----
+bool operator> (const fp16& lhs, const fp16& rhs) noexcept;
+----
+
+Comparison operator >.
+If the _cl_khr_fp16_ extension is not supported, +vload_half+ built-in function is called.
+
+[source]
+----
+bool operator<=(const fp16& lhs, const fp16& rhs) noexcept;
+----
+
+Comparison operator <=.
+If the _cl_khr_fp16_ extension is not supported, +vload_half+ built-in function is called.
+
+[source]
+----
+bool operator>=(const fp16& lhs, const fp16& rhs) noexcept;
+----
+
+Comparison operator >=.
+If the _cl_khr_fp16_ extension is not supported, +vload_half+ built-in function is called.
+
+[source]
+----
+fp16 operator+(const fp16& lhs, const fp16& rhs) noexcept;
+----
+
+Addition operator.
+If the _cl_khr_fp16_ extension is not supported, +vload_half+ and +vstore_half+ built-in functions are called.
+
+[source]
+----
+fp16 operator-(const fp16& lhs, const fp16& rhs) noexcept;
+----
+
+Subtract operator.
+If the _cl_khr_fp16_ extension is not supported, +vload_half+ and +vstore_half+ built-in functions are called.
+
+[source]
+----
+fp16 operator*(const fp16& lhs, const fp16& rhs) noexcept;
+----
+
+Multiplication operator.
+If the _cl_khr_fp16_ extension is not supported, +vload_half+ and +vstore_half+ built-in functions are called.
+
+[source]
+----
+fp16 operator/(const fp16& lhs, const fp16& rhs) noexcept;
+----
+
+Division operator.
+If the _cl_khr_fp16_ extension is not supported, +vload_half+ and +vstore_half+ built-in functions are called.

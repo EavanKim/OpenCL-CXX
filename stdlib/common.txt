@@ -1,0 +1,179 @@
+// Copyright 2017 The Khronos Group. 
+//
+//  Khronos licenses this file to you under the Creative Commons Attribution 4.0 
+//  International (CC BY 4.0) License (the "License"); you may not use this file 
+//  except in compliance with the License.  You may obtain a copy of the License 
+//  at https://creativecommons.org/licenses/by/4.0/
+//
+//  Unless required by applicable law or agreed to in writing, material distributed 
+//  under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+//  CONDITIONS OF ANY KIND, either express or implied. If all or a portion of this 
+//  material is re-used, notice substantially similar to the following must be included:
+//
+//  This specification includes material developed at The Khronos Group 
+//  (http://www.khronos.org/). Khronos supplied such material on an "AS IS" BASIS, 
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, under 
+//  the terms of the Creative Commons Attribution 4.0 International (CC BY 4.0) 
+//  License (the "License"), available at https://creativecommons.org/licenses/by/4.0/. 
+//  All use of such material is governed by the term of the License. Khronos bears 
+//  no responsibility whatsoever for additions or modifications to its material.
+
+[[common-functions]]
+=== Common Functions
+
+This section describes the OpenCL {cpp} library common functions that take scalar or vector arguments.
+Vector versions of common functions operate component-wise.
+Descriptions are always per-component.
+
+The built-in common functions are implemented using the round to nearest even rounding mode.
+
+Here +gentype+ matches: ++half++__n__ link:#ftn4[[4]], ++float++__n__ or ++double++__n__ link:#ftn18[[18]]
+
+[[header-opencl_common-synopsis]]
+==== Header <opencl_common> Synopsis
+
+[source]
+----
+namespace cl
+{
+#ifdef cl_khr_fp16
+halfn clamp(halfn x, halfn min, halfn max);
+halfn degrees(halfn t);
+halfn max(halfn x, halfn y);
+halfn min(halfn x, halfn y);
+halfn mix(halfn x, halfn y, halfn a);
+halfn radians(halfn t);
+halfn step(halfn edge, halfn x);
+halfn smoothstep(halfn edge0, halfn edge1, halfn x);
+halfn sign(halfn t);
+#endif
+
+#ifdef cl_khr_fp64
+doublen clamp(doublen x, doublen min, doublen max);
+doublen degrees(doublen t);
+doublen max(doublen x, doublen y);
+doublen min(doublen x, doublen y);
+doublen mix(doublen x, doublen y, doublen a);
+doublen radians(doublen t);
+doublen step(doublen edge, doublen x);
+doublen smoothstep(doublen edge0, doublen edge1, doublen x);
+doublen sign(doublen t);
+#endif
+
+floatn clamp(floatn x, floatn min, floatn max);
+floatn degrees(floatn t);
+floatn max(floatn x, floatn y);
+floatn min(floatn x, floatn y);
+floatn mix(floatn x, floatn y, floatn a);
+floatn radians(floatn t);
+floatn step(floatn edge, floatn x);
+floatn smoothstep(floatn edge0, floatn edge1, floatn x);
+floatn sign(floatn t);
+
+}
+----
+
+[[common-operations]]
+==== Common operations
+
+[[clamp-1]]
+===== clamp
+[source]
+----
+gentype clamp(gentype x, gentype minval, gentype maxval);
+----
+
+Returns +fmin(fmax(x, minval), maxval)+.
+
+Results are undefined if +minval > maxval+.
+
+[[degrees]]
+===== degrees
+[source]
+----
+gentype degrees(gentype radians);
+----
+
+Converts radians to degrees, i.e. +(180 / π) * radians+.
+
+[[max-1]]
+===== max
+[source]
+----
+gentype max(gentype x, gentype y);
+----
+
+Returns +y+ if +x < y+, otherwise it returns +x+.
+If +x+ or +y+ are +infinite+ or +NaN+, the return values are undefined.
+
+[[min-1]]
+===== min
+[source]
+----
+gentype min(gentype x, gentype y);
+----
+
+Returns +y+ if +y < x+, otherwise it returns +x+.
+If +x+ or +y+ are +infinite+ or +NaN+, the return values are undefined.
+
+[[mix]]
+===== mix
+[source]
+----
+gentype mix(gentype x, gentype y, gentype a);
+----
+
+Returns the linear blend of +x+ and +y+ implemented as:
+
++x + (y - x) * a+
+
++a+ must be a value in the range 0.0 ... 1.0.
+If +a+ is not in the range 0.0 ... 1.0, the return values are undefined.
+
+[[radians]]
+===== radians
+[source]
+----
+gentype radians(gentype degrees);
+----
+
+Converts degrees to radians, i.e. +(π / 180) * degrees+.
+
+[[step]]
+===== step
+[source]
+----
+gentype step(gentype edge, gentype x);
+----
+
+Returns +0.0+ if +x < edge+, otherwise it returns +1.0+.
+
+[[smoothstep]]
+===== smoothstep
+[source]
+----
+gentype smoothstep(gentype edge0, gentype edge1, gentype x);
+----
+
+Returns +0.0+ if +x \<= edge0+ and +1.0+ if +x >= edge1+ and performs smooth Hermite interpolation between +0+ and +1+ when +edge0 < x < edge1+.
+This is useful in cases where you would want a threshold function with a smooth transition.
+
+This is equivalent to:
+[source]
+----
+gentype t;
+t = clamp((x - edge0) / (edge1 - edge0), 0, 1);
+return t * t * (3 - 2 * t);
+----
+
+Results are undefined if +edge0 >= edge1+ or if +x+, +edge0+ or +edge1+ is a +NaN+.
+
+[[sign]]
+===== sign
+[source]
+----
+gentype sign(gentype x);
+----
+
+Returns +1.0+ if +x > 0+, +-0.0+ if +x = -0.0+, ++0.0+ if +x = +0.0+, or +-1.0+ if +x < 0+.
+Returns +0.0+ if +x+ is a +NaN+.
